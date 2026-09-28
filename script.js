@@ -1,7 +1,7 @@
-import { createIcons, ShieldCheck, Cog, Camera, Timer, Coins, Globe, Mail, Phone, MapPin } from 'lucide';
+import { createIcons, ShieldCheck, Cog, Camera, Timer, Coins, Globe, Mail, Phone, MapPin, Menu, X } from 'lucide';
 
 createIcons({
-    icons: { ShieldCheck, Cog, Camera, Timer, Coins, Globe, Mail, Phone, MapPin },
+    icons: { ShieldCheck, Cog, Camera, Timer, Coins, Globe, Mail, Phone, MapPin, Menu, X },
     attrs: { 'stroke-width': 1.8 }
 });
 
@@ -9,7 +9,36 @@ const navbar = document.querySelector('.navbar');
 const hero = document.querySelector('.hero');
 const heroBg = document.querySelector('.hero-bg');
 const floatingDemo = document.querySelector('.floating-demo');
+const navToggle = document.querySelector('.nav-toggle');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function closeNavigation() {
+    if (!navbar || !navToggle) return;
+    navbar.classList.remove('is-open');
+    navToggle.setAttribute('aria-expanded', 'false');
+    navToggle.setAttribute('aria-label', 'Open navigation');
+}
+
+if (navbar && navToggle) {
+    navToggle.addEventListener('click', () => {
+        const isOpen = navToggle.getAttribute('aria-expanded') === 'true';
+        navbar.classList.toggle('is-open', !isOpen);
+        navToggle.setAttribute('aria-expanded', String(!isOpen));
+        navToggle.setAttribute('aria-label', isOpen ? 'Open navigation' : 'Close navigation');
+    });
+
+    document.querySelectorAll('.nav-menu a').forEach(link => {
+        link.addEventListener('click', closeNavigation);
+    });
+
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') closeNavigation();
+    });
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 968) closeNavigation();
+    });
+}
 
 // Smooth scroll for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
